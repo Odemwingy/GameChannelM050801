@@ -8,6 +8,7 @@
       @search="query = $event"
       @select-category="selectCategory"
       @go-home="goHome"
+      @open-points="openPoints"
     />
 
     <main class="page-frame">
@@ -33,6 +34,16 @@
         :featured-games="featuredGames"
         @open-game="openGame"
       />
+
+      <PointsHistory
+        v-if="route.view === 'points'"
+        @back="goHome"
+      />
+
+      <MemberBind
+        v-if="route.view === 'member'"
+        @back="goHome"
+      />
     </main>
   </div>
 </template>
@@ -43,6 +54,8 @@ import AppHeader from './components/AppHeader.vue'
 import GameDetail from './components/GameDetail.vue'
 import GameList from './components/GameList.vue'
 import GamePlay from './components/GamePlay.vue'
+import PointsHistory from './components/PointsHistory.vue'
+import MemberBind from './components/MemberBind.vue'
 import { categories, findGame, games } from './data/games'
 import { getArrangement } from './utils/breakpoints'
 import { useAuth } from './composables/useAuth'
@@ -77,6 +90,8 @@ const recommendedGames = computed(() =>
 
 function readRoute() {
   const hash = window.location.hash
+  if (hash.startsWith('#/points')) return { view: 'points', gameId: null, roomId: null }
+  if (hash.startsWith('#/member')) return { view: 'member', gameId: null, roomId: null }
   let match = hash.match(/^#\/play\/([^/?#]+)\/([^/?#]+)/)
   if (match) return { view: 'play', gameId: match[1], roomId: match[2] }
   match = hash.match(/^#\/play\/([^/?#]+)/)
@@ -102,6 +117,12 @@ function openPlay(gameId, roomId) {
 function goHome() {
   window.location.hash = '/'
   route.value = { view: 'home', gameId: null, roomId: null }
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function openPoints() {
+  window.location.hash = '/points'
+  route.value = { view: 'points', gameId: null, roomId: null }
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 

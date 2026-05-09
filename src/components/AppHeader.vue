@@ -17,10 +17,10 @@
         />
       </label>
 
-      <div class="user-pill" aria-label="当前积分">
+      <button class="user-pill" type="button" aria-label="查看积分" @click="$emit('open-points')">
         <span>{{ user?.points ?? '--' }}</span>
         <small>积分</small>
-      </div>
+      </button>
     </div>
 
     <nav class="category-strip" aria-label="游戏分类">
@@ -50,5 +50,5 @@ defineProps({
   categories: { type: Array, required: true },
 })
 
-defineEmits(['search', 'select-category', 'go-home'])
+defineEmits(['search', 'select-category', 'go-home', 'open-points'])
 </script>

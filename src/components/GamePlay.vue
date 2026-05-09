@@ -75,6 +75,7 @@
         <p v-if="gameOver.winners.length">
           获胜者: {{ gameOver.winners.join(', ') }}
         </p>
+        <p v-if="pointsEarned > 0" class="points-earned">获得 {{ pointsEarned }} 积分</p>
         <div class="result-actions">
           <button class="btn-primary" @click="handleReady">再来一局</button>
           <button class="btn-secondary" @click="$emit('back')">返回大厅</button>
@@ -91,6 +92,7 @@ import DoudizhuTable from './DoudizhuTable.vue'
 import RoomLobby from './RoomLobby.vue'
 import { useAuth } from '../composables/useAuth'
 import { useMultiplayer } from '../composables/useMultiplayer'
+import { apiPost } from '../utils/api'
 import { findGame } from '../data/games'
 
 const props = defineProps({
@@ -104,6 +106,7 @@ const auth = useAuth()
 const mp = useMultiplayer()
 
 const isReady = ref(false)
+const pointsEarned = ref(0)
 
 const gameMeta = computed(() => {
   const game = findGame(props.gameId)
@@ -181,6 +184,28 @@ function copyRoomId() {
 watch(() => mp.roomState, (newState) => {
   if (newState === 'PLAYING') {
     isReady.value = false
+    pointsEarned.value = 0
+  }
+})
+
+// 监听游戏结束，结算积分
+watch(() => mp.gameOver, async (over) => {
+  if (!over || !auth.user) return
+  const sessionId = mp.roomId
+  if (!sessionId) return
+  try {
+    // 参与奖励
+    const playResult = await apiPost('/points/settle', { sessionId, reason: 'GAME_PLAY' })
+    let earned = playResult.amount || 0
+    // 获胜奖励
+    if (over.winners.includes(mp.myPlayerId)) {
+      const winResult = await apiPost('/points/settle', { sessionId, reason: 'GAME_WIN' })
+      earned += winResult.amount || 0
+    }
+    pointsEarned.value = earned
+    auth.refreshProfile()
+  } catch {
+    // 积分结算失败不影响游戏体验
   }
 })
 
