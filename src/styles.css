@@ -1219,6 +1219,168 @@ button {
   justify-content: center;
 }
 
+/* ========== Doudizhu ========== */
+
+.doudizhu-table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 640px;
+  min-height: 500px;
+  gap: 16px;
+  padding: 16px;
+}
+
+.opponent-area {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.opponent-seat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: var(--radius);
+  transition: border-color 0.2s;
+}
+
+.opponent-seat.seat-active {
+  border-color: var(--accent);
+}
+
+.opponent-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--stroke);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.opponent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.opponent-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.opponent-cards {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.play-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: var(--radius);
+  border: 1px dashed var(--stroke);
+}
+
+.play-area-hint {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.played-cards {
+  display: flex;
+  gap: 4px;
+}
+
+.played-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 48px;
+  background: var(--card-bg);
+  border: 1px solid var(--stroke-strong);
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.my-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.my-hand {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 8px;
+}
+
+.hand-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 60px;
+  background: var(--card-bg);
+  border: 2px solid var(--stroke);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.hand-card:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+.hand-card.card-selected {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  background: #e8f0fe;
+}
+
+.hand-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.turn-hint {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-right: 8px;
+}
+
+.turn-hint.my-turn {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 /* ========== Responsive ========== */
 
 @media (max-width: 655px) {

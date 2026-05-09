@@ -44,6 +44,16 @@
         :player-names="playerNames"
         @place-stone="handlePlaceStone"
       />
+      <DoudizhuTable
+        v-if="gameId === 'doudizhu' && gameView"
+        :game-view="gameView"
+        :my-player-id="mp.myPlayerId"
+        :players="players"
+        :disabled="!!gameOver"
+        :last-action="mp.lastAction"
+        @play-card="handlePlayCard"
+        @pass="handlePass"
+      />
       <div v-if="error" class="error-banner">{{ error }}</div>
     </div>
 
@@ -66,6 +76,7 @@
 <script setup>
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import GobangBoard from './GobangBoard.vue'
+import DoudizhuTable from './DoudizhuTable.vue'
 import { useAuth } from '../composables/useAuth'
 import { useMultiplayer } from '../composables/useMultiplayer'
 
@@ -101,6 +112,9 @@ const myStone = computed(() => (mySeatIndex.value === 0 ? 'B' : 'W'))
 
 const isMyTurn = computed(() => {
   if (!gameView.value || gameOver.value) return false
+  if (props.gameId === 'doudizhu') {
+    return gameView.value.turnPlayerId === mp.myPlayerId
+  }
   return gameView.value.turn === mySeatIndex.value
 })
 
@@ -118,6 +132,14 @@ function handleReady() {
 
 function handlePlaceStone({ x, y }) {
   mp.sendAction('PLACE_STONE', { x, y })
+}
+
+function handlePlayCard(cards) {
+  mp.sendAction('PLAY_CARD', { cards })
+}
+
+function handlePass() {
+  mp.sendAction('PASS', {})
 }
 
 function copyRoomId() {
