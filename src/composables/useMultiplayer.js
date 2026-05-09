@@ -1,7 +1,7 @@
 import { reactive, readonly } from 'vue'
 import { MultiplayerClient, buildDevAuth } from '../utils/multiplayer-client.js'
 
-const WS_URL = import.meta.env.VITE_WS_URL || `ws://${location.hostname}:3001`
+const WS_URL = import.meta.env.VITE_WS_URL || `http://${location.hostname}:3001`
 
 const state = reactive({
   connected: false,
