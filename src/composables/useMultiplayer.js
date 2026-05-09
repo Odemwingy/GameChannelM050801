@@ -80,12 +80,16 @@ function wireEvents() {
 export function useMultiplayer() {
   async function connect(playerId) {
     state.myPlayerId = playerId
+    state.error = null
+    state.connected = false
+
     client = new MultiplayerClient({
       url: WS_URL,
       auth: buildDevAuth(playerId),
     })
     wireEvents()
 
+    // 状态同步事件
     client.socket.on('connect', () => {
       state.connected = true
       state.error = null
@@ -96,18 +100,26 @@ export function useMultiplayer() {
     })
 
     client.socket.on('connect_error', (err) => {
-      state.error = err.message
+      state.error = `连接失败: ${err.message}`
+      state.connected = false
     })
 
     // 自动重连后恢复房间
     client.socket.io.on('reconnect', () => {
       state.connected = true
+      state.error = null
       if (state.roomId) {
         client.reconnectRoom(state.roomId)
       }
     })
 
-    await client.connect()
+    try {
+      await client.connect()
+      state.connected = true
+    } catch (err) {
+      state.error = err.message || '无法连接到服务器'
+      state.connected = false
+    }
   }
 
   function createRoom(gameId) {

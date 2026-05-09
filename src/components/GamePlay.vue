@@ -1,9 +1,13 @@
 <template>
   <div class="game-play">
-    <!-- 连接中 -->
+    <!-- 连接中 / 连接失败 -->
     <div v-if="!connected" class="game-loading">
-      <p>正在连接服务器...</p>
-      <p v-if="error" class="error-text">{{ error }}</p>
+      <p v-if="!error">正在连接服务器...</p>
+      <template v-else>
+        <p class="error-text">{{ error }}</p>
+        <button class="btn-primary" @click="handleRetry">重试连接</button>
+        <button class="btn-secondary" @click="$emit('back')">返回</button>
+      </template>
     </div>
 
     <!-- 房间大厅（未指定 roomId 时显示） -->
@@ -160,6 +164,16 @@ function handleCreateRoom() {
 
 function handleJoinRoom(targetRoomId) {
   mp.joinRoom(targetRoomId)
+}
+
+async function handleRetry() {
+  mp.clearError()
+  if (auth.user) {
+    await mp.connect(auth.user.id)
+    if (props.roomId) {
+      mp.joinRoom(props.roomId)
+    }
+  }
 }
 
 function handlePlaceStone({ x, y }) {

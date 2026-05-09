@@ -18,9 +18,16 @@ export class MultiplayerClient {
       const cleanup = () => {
         this.socket.off('connect', onConnect)
         this.socket.off('connect_error', onError)
+        clearTimeout(timer)
       }
-      this.socket.on('connect', onConnect)
-      this.socket.on('connect_error', onError)
+      // 超时 10 秒
+      const timer = setTimeout(() => {
+        cleanup()
+        reject(new Error('连接超时，请检查服务是否启动 (ws://localhost:3001)'))
+      }, 10000)
+
+      this.socket.once('connect', onConnect)
+      this.socket.once('connect_error', onError)
       this.socket.connect()
     })
   }
