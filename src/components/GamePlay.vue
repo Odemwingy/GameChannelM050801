@@ -224,13 +224,30 @@ watch(() => mp.gameOver, async (over) => {
 })
 
 onMounted(async () => {
-  await auth.init()
+  try {
+    await auth.init()
+  } catch (e) {
+    console.error('[GamePlay] auth.init failed:', e)
+  }
+
   if (auth.user) {
+    console.log('[GamePlay] connecting as', auth.user.id)
     await mp.connect(auth.user.id)
     if (props.roomId) {
       mp.joinRoom(props.roomId)
     }
-    // roomId 为 null 时显示 RoomLobby，由用户选择创建或加入
+  } else {
+    console.error('[GamePlay] auth.user is null after init, error:', auth.error)
+    // 回退：用设备指纹作为临时 ID 尝试连接
+    const fp = localStorage.getItem('ife_device_fp')
+    if (fp) {
+      const fallbackId = 'guest_' + fp.slice(0, 8)
+      console.log('[GamePlay] using fallback id:', fallbackId)
+      await mp.connect(fallbackId)
+      if (props.roomId) {
+        mp.joinRoom(props.roomId)
+      }
+    }
   }
 })
 
