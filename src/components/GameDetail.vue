@@ -12,7 +12,7 @@
           <div class="play-overlay">
             <h1>{{ game.title }}</h1>
             <p>{{ game.genre }} · {{ game.likes }}</p>
-            <button class="play-button" type="button" @click="$emit('play', game.id)">Play</button>
+            <button class="play-button" type="button" @click="$emit('play', game.id)">{{ game.serverGame ? '联机对战' : 'Play' }}</button>
           </div>
         </div>
 

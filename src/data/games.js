@@ -2,6 +2,24 @@ const asset = (name) => `/assets/source/${name}`
 
 export const games = [
   {
+    id: 'gobang',
+    title: '五子棋',
+    genre: 'Classic',
+    likes: '联机',
+    image: asset('source-216-6bf5f499f6c1.png'),
+    description: '经典五子棋对战，两名玩家轮流落子，先将五颗棋子连成一线者获胜。支持在线联机对战。',
+    serverGame: true,
+  },
+  {
+    id: 'doudizhu',
+    title: '斗地主',
+    genre: 'Card',
+    likes: '联机',
+    image: asset('source-217-a9e92b686207.png'),
+    description: '经典三人斗地主，三人轮流出牌，先出完手牌的玩家获胜。支持在线联机对战。',
+    serverGame: true,
+  },
+  {
     id: 'hexa-stack',
     title: 'Hexa Stack',
     genre: 'Puzzle',
