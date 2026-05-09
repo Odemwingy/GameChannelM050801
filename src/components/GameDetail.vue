@@ -12,7 +12,7 @@
           <div class="play-overlay">
             <h1>{{ game.title }}</h1>
             <p>{{ game.genre }} · {{ game.likes }}</p>
-            <button class="play-button" type="button">Play</button>
+            <button class="play-button" type="button" @click="$emit('play', game.id)">Play</button>
           </div>
         </div>
 
@@ -55,7 +55,7 @@ defineProps({
   recommendedGames: { type: Array, required: true },
 })
 
-defineEmits(['back', 'open-game'])
+defineEmits(['back', 'open-game', 'play'])
 
 const fallbackDescription =
   'Jump into a fast, casual browser game designed for short sessions. The game area is ready to be connected to the packaged iframe runtime in the next integration step.'

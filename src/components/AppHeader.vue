@@ -18,7 +18,7 @@
       </label>
 
       <div class="user-pill" aria-label="当前积分">
-        <span>120</span>
+        <span>{{ user?.points ?? '--' }}</span>
         <small>积分</small>
       </div>
     </div>
@@ -40,6 +40,10 @@
 </template>
 
 <script setup>
+import { useAuth } from '../composables/useAuth'
+
+const { user } = useAuth()
+
 defineProps({
   query: { type: String, required: true },
   selectedCategory: { type: String, required: true },

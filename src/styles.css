@@ -887,3 +887,369 @@ button {
     grid-template-columns: 1fr;
   }
 }
+
+/* ========== Game Play ========== */
+
+.game-play {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-loading {
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.game-loading .error-text {
+  color: #d32f2f;
+  margin-top: 8px;
+}
+
+/* ========== Waiting Room ========== */
+
+.waiting-room {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 480px;
+  width: 100%;
+}
+
+.waiting-room h2 {
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.room-id-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--stroke-strong);
+  border-radius: var(--radius);
+  padding: 16px 24px;
+  margin-bottom: 24px;
+}
+
+.room-id-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.room-id-value {
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.copy-btn {
+  background: none;
+  border: 1px solid var(--stroke-strong);
+  border-radius: 4px;
+  padding: 4px 12px;
+  font-size: 13px;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.player-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.player-seat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--card-bg);
+  border: 1px solid var(--stroke);
+  border-radius: var(--radius);
+}
+
+.seat-empty {
+  opacity: 0.5;
+}
+
+.seat-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--stroke);
+  font-size: 14px;
+}
+
+.seat-ready {
+  background: #4caf50;
+  color: #fff;
+}
+
+/* ========== Buttons ========== */
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 4px;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: none;
+  color: var(--text-secondary);
+  border: 1px solid var(--stroke-strong);
+  border-radius: var(--radius);
+  padding: 12px 32px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 4px;
+}
+
+.btn-secondary:hover {
+  background: var(--stroke);
+}
+
+/* ========== Gobang Board ========== */
+
+.playing-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.gobang-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 520px;
+}
+
+.gobang-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 480px;
+  padding: 0 8px;
+}
+
+.player-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+.player-label.active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.stone-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.stone-icon-black {
+  background: radial-gradient(circle at 35% 35%, #555, #111);
+}
+
+.stone-icon-white {
+  background: radial-gradient(circle at 35% 35%, #fff, #ccc);
+  border: 1px solid var(--stroke-strong);
+}
+
+.turn-text {
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.gobang-grid {
+  display: grid;
+  grid-template-columns: repeat(15, 1fr);
+  grid-template-rows: repeat(15, 1fr);
+  width: min(100%, 480px);
+  aspect-ratio: 1;
+  background: #dcb35c;
+  border: 2px solid #8b6914;
+  border-radius: 4px;
+  position: relative;
+}
+
+.gobang-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 0.5px solid rgba(0, 0, 0, 0.15);
+}
+
+.gobang-cell:hover .stone-hover {
+  opacity: 0.3;
+}
+
+.star-point::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #333;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.stone-black,
+.stone-white {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  z-index: 1;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.stone-black {
+  background: radial-gradient(circle at 35% 35%, #555, #111);
+}
+
+.stone-white {
+  background: radial-gradient(circle at 35% 35%, #fff, #ccc);
+}
+
+.stone-hover {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 1;
+}
+
+.stone-hover-black {
+  background: #333;
+}
+
+.stone-hover-white {
+  background: #eee;
+}
+
+.error-banner {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: var(--radius);
+  color: #856404;
+  font-size: 14px;
+}
+
+/* ========== Game Result ========== */
+
+.game-result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.game-result {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 40px 48px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.game-result h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.game-result p {
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+.result-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* ========== Responsive ========== */
+
+@media (max-width: 655px) {
+  .gobang-board {
+    max-width: 100%;
+    padding: 0 8px;
+  }
+
+  .gobang-info {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .waiting-room {
+    padding: 20px 16px;
+  }
+
+  .room-id-box {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .game-result {
+    margin: 20px;
+    padding: 24px;
+  }
+}
+
+@media (max-width: 979px) {
+  .gobang-grid {
+    max-width: 400px;
+  }
+}
