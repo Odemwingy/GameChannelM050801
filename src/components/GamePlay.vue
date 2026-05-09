@@ -6,6 +6,17 @@
       <p v-if="error" class="error-text">{{ error }}</p>
     </div>
 
+    <!-- 房间大厅（未指定 roomId 时显示） -->
+    <RoomLobby
+      v-else-if="!roomId && !mp.roomId"
+      :game-id="gameId"
+      :game-title="gameMeta.title"
+      :max-players="gameMeta.maxPlayers"
+      @back="$emit('back')"
+      @create-room="handleCreateRoom"
+      @join-room="handleJoinRoom"
+    />
+
     <!-- 等待房间 -->
     <div v-else-if="roomState === 'WAITING'" class="waiting-room">
       <h2>等待玩家加入</h2>
@@ -77,8 +88,10 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import GobangBoard from './GobangBoard.vue'
 import DoudizhuTable from './DoudizhuTable.vue'
+import RoomLobby from './RoomLobby.vue'
 import { useAuth } from '../composables/useAuth'
 import { useMultiplayer } from '../composables/useMultiplayer'
+import { findGame } from '../data/games'
 
 const props = defineProps({
   gameId: { type: String, required: true },
@@ -91,6 +104,14 @@ const auth = useAuth()
 const mp = useMultiplayer()
 
 const isReady = ref(false)
+
+const gameMeta = computed(() => {
+  const game = findGame(props.gameId)
+  return {
+    title: game?.title || props.gameId,
+    maxPlayers: props.gameId === 'doudizhu' ? 3 : 2,
+  }
+})
 
 const connected = computed(() => mp.connected)
 const roomId = computed(() => mp.roomId)
@@ -130,6 +151,14 @@ function handleReady() {
   isReady.value = true
 }
 
+function handleCreateRoom() {
+  mp.createRoom(props.gameId)
+}
+
+function handleJoinRoom(targetRoomId) {
+  mp.joinRoom(targetRoomId)
+}
+
 function handlePlaceStone({ x, y }) {
   mp.sendAction('PLACE_STONE', { x, y })
 }
@@ -161,9 +190,8 @@ onMounted(async () => {
     await mp.connect(auth.user.id)
     if (props.roomId) {
       mp.joinRoom(props.roomId)
-    } else {
-      mp.createRoom(props.gameId)
     }
+    // roomId 为 null 时显示 RoomLobby，由用户选择创建或加入
   }
 })
 
