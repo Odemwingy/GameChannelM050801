@@ -231,19 +231,15 @@ onMounted(async () => {
   }
 
   if (auth.user) {
-    console.log('[GamePlay] connecting as', auth.user.id)
     await mp.connect(auth.user.id)
     if (props.roomId) {
       mp.joinRoom(props.roomId)
     }
   } else {
-    console.error('[GamePlay] auth.user is null after init, error:', auth.error)
     // 回退：用设备指纹作为临时 ID 尝试连接
     const fp = localStorage.getItem('ife_device_fp')
     if (fp) {
-      const fallbackId = 'guest_' + fp.slice(0, 8)
-      console.log('[GamePlay] using fallback id:', fallbackId)
-      await mp.connect(fallbackId)
+      await mp.connect('guest_' + fp.slice(0, 8))
       if (props.roomId) {
         mp.joinRoom(props.roomId)
       }

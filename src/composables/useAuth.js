@@ -17,17 +17,13 @@ export function useAuth() {
 
     try {
       const fp = getDeviceFingerprint()
-      console.log('[useAuth] fingerprint:', fp)
 
       // 尝试用已有 token 获取 profile
       if (state.token) {
-        console.log('[useAuth] trying existing token...')
         try {
           state.user = await apiGet('/user/profile')
-          console.log('[useAuth] profile loaded:', state.user)
           return
         } catch (e) {
-          console.log('[useAuth] token invalid, clearing:', e.message)
           state.token = ''
           localStorage.removeItem('ife_token')
         }
@@ -35,9 +31,7 @@ export function useAuth() {
 
       // 注册新用户
       const nickname = 'Player_' + fp.slice(0, 6)
-      console.log('[useAuth] registering with:', { deviceFp: fp, nickname })
       const user = await apiPost('/user/register', { deviceFp: fp, nickname })
-      console.log('[useAuth] registered:', user)
       state.user = user
       state.token = `dev_${user.id}`
       localStorage.setItem('ife_user_id', user.id)
@@ -58,8 +52,12 @@ export function useAuth() {
     }
   }
 
+  const ro = readonly(state)
   return {
-    ...readonly(state),
+    get user() { return ro.user },
+    get token() { return ro.token },
+    get loading() { return ro.loading },
+    get error() { return ro.error },
     init,
     refreshProfile,
   }
