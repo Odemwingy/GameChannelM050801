@@ -13,11 +13,14 @@ function headers(hasBody) {
 }
 
 async function request(method, path, body) {
+  const url = `${BASE}${path}`
   const opts = { method, headers: headers(!!body) }
   if (body) opts.body = JSON.stringify(body)
 
-  const res = await fetch(`${BASE}${path}`, opts)
+  console.log(`[api] ${method} ${url}`)
+  const res = await fetch(url, opts)
   const json = await res.json()
+  console.log(`[api] ${res.status}:`, json)
 
   if (!res.ok) {
     const err = new Error(json.message || `HTTP ${res.status}`)
